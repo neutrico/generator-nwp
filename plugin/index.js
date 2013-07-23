@@ -14,12 +14,6 @@ function Generator(args, options) {
 	yeoman.generators.Base.apply(this, arguments);
 
 	this.sourceRoot(path.join(__dirname, 'templates'));
-
-	this.on('end', function () {
-		this.installDependencies({ skipInstall: options['skip-install'] });
-	});
-
-	this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 }
 
 module.exports = Generator;
