@@ -1,0 +1,31 @@
+{
+	"name": "generator-nwp",
+	"version": "0.0.9",
+	"description": "Yeoman generator for Wordpress project for neutrico.pl",
+	"homepage": "https://github.com/neutrico/generator-nwp",
+	"author": {
+		"name": "Marcin Antczak",
+		"email": "marcin.antczak@neutrico.pl",
+		"url": "http://www.neutrico.pl"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/neutrico/generator-nwp.git"
+	},
+	"bugs": {
+		"url": "https://github.com/neutrico/generator-nwp/issues",
+		"email": "marcin.antczak@neutrico.pl"
+	},
+	"dependencies": {
+		"yeoman-generator": "~0.12.0",
+		"exec-sync": "~0.1.6",
+		"rimraf": "~2.1.4",
+		"colors": "~0.6.0-1",
+		"mysql": "~2.0.0-alpha7",
+		"node-uuid": "~1.4.0"
+	},
+	"engines": {
+		"node": ">=0.8.0"
+	},
+	"readmeFilename": "README.md"
+}
