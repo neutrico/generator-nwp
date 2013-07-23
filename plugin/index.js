@@ -10,10 +10,16 @@ var util   = require('util'),
 	yeoman = require('yeoman-generator'),
 	config = require('./../config.js');
 
-function Generator() {
+function Generator(args, options) {
 	yeoman.generators.Base.apply(this, arguments);
 
 	this.sourceRoot(path.join(__dirname, 'templates'));
+
+	this.on('end', function () {
+		this.installDependencies({ skipInstall: options['skip-install'] });
+	});
+
+	this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 }
 
 module.exports = Generator;
@@ -64,8 +70,24 @@ Generator.prototype.askFor = function askFor() {
 Generator.prototype.createPlugin = function createPlugin() {
 	var cb = this.async();
 
+	this.mkdir('doc');
+	this.mkdir('src/main/php');
+	this.mkdir('src/main/javascript');
+	this.mkdir('src/main/javascript/vendor');
+	this.mkdir('src/main/resources/css');
+	this.mkdir('src/main/resources/fonts');
+	this.mkdir('src/main/resources/images');
+	this.mkdir('src/main/resources/lang');
+
+	this.copy('*.php', 'src/main/php');
+
 	this.tarball('https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/tarball/master', 'app/wp-content/plugins', cb);
 };
+
+Generator.prototype.gruntfile = function gruntfile() {
+	this.copy('Gruntfile.js', 'Gruntfile.js');
+};
+
 
 Generator.prototype.editFiles = function editFiles(){
 	var cb       = this.async(),
