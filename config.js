@@ -8,6 +8,32 @@ var path = require('path'),
 	configPath      = path.join(configDirectory, 'config.json');
 
 /**
+ *  Create the config file
+ *
+ *  @param object values Values to write in the config file
+ *  @param function cb Callback function
+ */
+function createConfig(values, cb) {
+	var defaults = {
+		authorName: 'neutrico.pl',
+		authorURI: 'http://www.neutrico.pl'
+	},
+		configValues = {
+			authorName: values.authorName || defaults.authorName,
+			authorURI:  values.authorURI || defaults.authorURI
+		},
+
+		configData = '{\n\t';
+
+	configData += '"authorName": "'+configValues.authorName+'",\n\t"authorURI": "'+configValues.authorURI+'",\n\t';
+	configData += '\n}';
+
+	fs.mkdir(configDirectory, '0777', function() {
+		fs.writeFile(configPath, configData, 'utf8', cb);
+	});
+}
+
+/**
  *  Read the config file
  *  And trigger the callback function with errors and
  *  datas as parameters
@@ -26,34 +52,6 @@ function getConfig(cb) {
 	catch(e) {
 		cb(true);
 	}
-}
-
-/**
- *  Create the config file
- *
- *  @param object values Values to write in the config file
- *  @param function cb Callback function
- */
-function createConfig(values, cb) {
-	var defaults = {
-		authorName: 'REDspace',
-		authorURI: 'http://www.redspace.com',
-		themeUrl: 'https://github.com/theREDspace/wp_starter'
-	},
-		configValues = {
-			authorName: values.authorName || defaults.authorName,
-			authorURI:  values.authorURI || defaults.authorURI,
-			themeUrl:   values.themeUrl || defaults.themeUrl
-		},
-
-		configData = '{\n\t';
-
-	configData += '"authorName": "'+configValues.authorName+'",\n\t"authorURI": "'+configValues.authorURI+'",\n\t';
-	configData += '"theme": "'+configValues.themeUrl+'"\n}';
-
-	fs.mkdir(configDirectory, '0777', function() {
-		fs.writeFile(configPath, configData, 'utf8', cb);
-	});
 }
 
 module.exports = {

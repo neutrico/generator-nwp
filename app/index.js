@@ -211,6 +211,11 @@ WPGenerator.prototype.askFor = function askFor() {
 
 	prompts = [
 		{
+			type: 'list',
+			name: 'itemType',
+			message: 'Which item do you want to create? ',
+			choices: [ 'Theme', 'Plugin' ]
+		}, {
 			name: 'themeName',
 			message: 'Name of the theme you want to use: ',
 			default: 'mytheme'
