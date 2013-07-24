@@ -5,20 +5,22 @@
  * A foundation off of which to build well-documented WordPress plugins
  * that also follow WordPress coding standards and PHP best practices.
  *
- * @package   Plugin_Name
- * @author    Your Name <email@example.com>
- * @license   GPL-2.0+
- * @link      http://example.com
- * @copyright 2013 Your Name or Company Name
+ * @package     @@name
+ * @description @@description
+ * @author      @@author <@@authormail>
+ * @license     GPL-2.0+
+ * @link        @@url
+ * @copyright   @@inceptionyear @@author
  *
  * @wordpress-plugin
- * Plugin Name: TODO
- * Plugin URI:  TODO
- * Description: TODO
- * Version:     1.0.0
- * Author:      TODO
- * Author URI:  TODO
- * Text Domain: plugin-name-locale
+ *
+ * Plugin Name: @@name
+ * Plugin URI:  @@homepage
+ * Description: @@description
+ * Version:     @@version @@timestamp
+ * Author:      @@author
+ * Author URI:  @@authoruri
+ * Text Domain: @@slug
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path: /lang

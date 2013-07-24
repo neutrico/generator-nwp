@@ -28,13 +28,16 @@ NwpGenerator.prototype.getConfig = function getConfig() {
 	var cb   = this.async(),
 		self = this;
 
+	self.defaultAuthorEmail = '';
 	self.defaultAuthorName = '';
 	self.defaultAuthorURI = '';
 	self.configExists = false;
 
 	config.getConfig(function(err, data) {
 		if (!err) {
+			self.defaultAuthorEmail = data.authorEmail;
 			self.defaultAuthorName = data.authorName;
+			self.defaultAuthorURI = data.authorURI;
 		}
 		cb();
 	});
@@ -42,6 +45,7 @@ NwpGenerator.prototype.getConfig = function getConfig() {
 
 NwpGenerator.prototype.askFor = function askFor() {
 	var cb   = this.async(),
+		self = this,
 		_ = require('underscore'),
 		initialPrompts = [],
 		extendedPrompts = [],
@@ -55,31 +59,39 @@ NwpGenerator.prototype.askFor = function askFor() {
 		default: 'myPlugin'
 	}];
 
-	if (!this.configExists) {
-		this.log.writeln('test3');
+	if (!self.configExists) {
+		self.log.writeln('test3');
 
 		extendedPrompts = [ {
 			type: 'input',
-			name: 'itemAuthorName',
-			message: 'Author Name: ',
-			default: this.defaultAuthorName
-		}, {
+			name: 'pluginAuthorEmail',
+			message: 'Author Email',
+			default: self.defaultAuthorEmail
+		},{
 			type: 'input',
-			name: 'itemAuthorURI',
+			name: 'pluginAuthorName',
+			message: 'Author Name: ',
+			default: self.defaultAuthorName
+		},{
+			type: 'input',
+			name: 'pluginAuthorURI',
 			message: 'Author URI: ',
-			default: this.defaultAuthorName
+			default: self.defaultAuthorURI
 		}];
-		values = '';
-
 	}
 	prompts = _.union( initialPrompts, extendedPrompts );
 
-	this.prompt(prompts,function(props) {
-							this.pluginName   = props.pluginName;
-							this.pluginAuthorName = props.pluginAuthorName;
-							this.pluginAuthorURI = props.pluginAuthorURI;
-							if (!this.configExists) {
-								values = '';
+	self.prompt(prompts,function(props) {
+							self.pluginName   = props.pluginName;
+							self.pluginAuthorEmail = props.pluginAuthorEmail;
+							self.pluginAuthorName = props.pluginAuthorName;
+							self.pluginAuthorURI = props.pluginAuthorURI;
+							if (!self.configExists) {
+								values = {
+									authorEmail: self.pluginAuthorEmail,
+									authorName: self.pluginAuthorName,
+									authorURI: self.pluginAuthorURI
+								};
 								config.createConfig(values, cb);
 							} else {
 								cb();
@@ -88,9 +100,7 @@ NwpGenerator.prototype.askFor = function askFor() {
 };
 
 NwpGenerator.prototype.createPlugin = function createPlugin() {
-	// var cb = this.async();
-	var self = this,
-		_ = require('underscore');
+	var _ = require('underscore');
 
 	_.str = require('underscore.string');
 	_.mixin(_.str.exports());
@@ -105,46 +115,27 @@ NwpGenerator.prototype.createPlugin = function createPlugin() {
 	this.mkdir('src/main/resources/images');
 	this.mkdir('src/main/resources/lang');
 
-	this.template('php/plugin-name.php', 'src/main/php/' + _.slugify(self.pluginName) + '.php');
-	this.template('php/class-plugin-name.php', 'src/main/php/class-' + _.slugify(self.pluginName) + '.php' );
+	this.copy('css/admin.css', 'src/main/resources/css/admin.css');
+	this.copy('css/main.css', 'src/main/resources/css/main.css');
 
-	// this.tarball('https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/tarball/master', 'app/wp-content/plugins', cb);
+	this.template('php/plugin-name.php', 'src/main/php/' + _.slugify( this.pluginName ) + '.php');
+	this.template('php/class-plugin-name.php', 'src/main/php/class-' + _.slugify( this.pluginName ) + '.php' );
+};
+
+NwpGenerator.prototype.bower = function bower() {
+  this.copy('_bowerrc', '.bowerrc');
+  this.copy('_bower.json', 'bower.json');
+};
+
+NwpGenerator.prototype.packageJSON = function packageJSON() {
+	this.template('_package.json', 'package.json');
 };
 
 NwpGenerator.prototype.gruntfile = function gruntfile() {
 	this.copy('Gruntfile.js', 'Gruntfile.js');
 };
 
-
-NwpGenerator.prototype.editFiles = function editFiles(){
-	var cb       = this.async(),
-		self     = this,
-		_ = require('underscore'),
-		pluginFile = 'src/main/php/' + _.slugify(self.pluginName) + '.php';
-
-	fs.readFile(pluginFile, 'utf8', function (err, data) {
-		if (err) { throw err; }
-
-		data = data.replace(/^.*@package: .*$/mg, ' * @package ' + self.pluginName);
-		data = data.replace(/^.*Plugin Name: .*$/mg, ' * Plugin Name: ' + self.pluginName);
-		// data = data.replace(/^.*Plugin URI: .*$/mg, ' * Plugin URI: ' + self.pluginUri);
-
-		// data = data.replace(/^.*Text Domain: .*$/mg, ' * Text Domain: ' + self.pluginName);
-		// data = data.replace(/^.*Author: .*$/mg, ' * Author: ' + self.pluginAuthorName);
-		// data = data.replace(/^.*Author URI: .*$/mg, ' * Author URI: ' + self.pluginAuthorURI);
-
-		fs.writeFile(pluginFile, data);
-		fs.unlink('app/wp-content/plugins/README.md', function() {
-			cb();
-		});
-	});
-};
-
 NwpGenerator.prototype.goodbye = function goodbye() {
 	this.log.writeln('Plugin created successfully');
 	this.log.writeln('');
-};
-
-NwpGenerator.prototype.packageJSON = function packageJSON() {
-	this.template('_package.json', 'package.json');
 };

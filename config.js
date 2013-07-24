@@ -4,8 +4,8 @@
 var path = require('path'),
 	fs   = require('fs'),
 	home            = process.env.HOME || process.env.USERPROFILE,
-	configDirectory = path.join(home, '.yeoman-trs-wordpress'),
-	configPath      = path.join(configDirectory, 'config.json');
+	configDirectory = path.join(home, '.yeoman'),
+	configPath      = path.join(configDirectory, 'nwp-config.json');
 
 /**
  *  Create the config file
@@ -15,18 +15,20 @@ var path = require('path'),
  */
 function createConfig(values, cb) {
 	var defaults = {
-		authorName: 'neutrico.pl',
-		authorURI: 'http://www.neutrico.pl'
+		authorName: 'Neutrico',
+		authorURI: 'http://www.neutrico.pl',
+		authorEmail: 'marcin.antczak@neutrico.pl'
 	},
 		configValues = {
 			authorName: values.authorName || defaults.authorName,
-			authorURI:  values.authorURI || defaults.authorURI
+			authorURI:  values.authorURI || defaults.authorURI,
+			authorEmail: values.authorEmail || defaults.authorEmail
 		},
 
 		configData = '{\n\t';
 
 	configData += '"authorName": "'+configValues.authorName+'",\n\t"authorURI": "'+configValues.authorURI+'",\n\t';
-	configData += '\n}';
+	configData += '"authorEmail": "'+configValues.authorEmail+'"\n}';
 
 	fs.mkdir(configDirectory, '0777', function() {
 		fs.writeFile(configPath, configData, 'utf8', cb);

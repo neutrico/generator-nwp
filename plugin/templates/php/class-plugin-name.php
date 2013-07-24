@@ -1,12 +1,10 @@
 <?php
 /**
- * Plugin Name.
- *
- * @package   Plugin_Name
- * @author    Your Name <email@example.com>
+ * @package   @@name
+ * @author    @@author <@@authormail>
  * @license   GPL-2.0+
- * @link      http://example.com
- * @copyright 2013 Your Name or Company Name
+ * @link      @@url
+ * @copyright @@inceptionyear @@author
  */
 
 /**

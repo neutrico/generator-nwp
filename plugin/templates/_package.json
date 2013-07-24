@@ -1,6 +1,6 @@
 {
 	"name": "<%= _.slugify(pluginName) %>",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"dependencies": {},
 	"private": true,
 	"licenses": [
@@ -18,9 +18,9 @@
 		}
 	],
 	"author": {
-		"name": "Neutrico.pl",
-		"url": "http://www.neutrico.pl",
-		"email": "marcin.antczak@neutrico.pl"
+		"name": "<%= pluginAuthorName %>",
+		"url": "<%= pluginAuthorURI %>",
+		"email": "<%= pluginAuthorEmail %>"
 	},
 	"config": {
 		"fullname": "<%= pluginName %>"
