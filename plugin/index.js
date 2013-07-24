@@ -6,63 +6,70 @@
 
 var util   = require('util'),
 	path   = require('path'),
-	fs     = require('fs'),
-	yeoman = require('yeoman-generator'),
-	config = require('./../config.js');
+	yeoman = require('yeoman-generator');
+	// fs     = require('fs'),
+	// config = require('./../config.js');
 
-function Generator(args, options) {
+var NwpGenerator = module.exports = function Generator(args, options) {
 	yeoman.generators.Base.apply(this, arguments);
 
 	this.sourceRoot(path.join(__dirname, 'templates'));
-}
 
-module.exports = Generator;
-
-util.inherits(Generator, yeoman.generators.NamedBase);
-
-Generator.prototype.getConfig = function getConfig() {
-	var cb   = this.async(),
-		self = this;
-
-	self.defaultAuthorName = '';
-	self.defaultAuthorURI = '';
-	self.configExists = false;
-
-	config.getConfig(function(err, data) {
-		if (!err) {
-			self.defaultAuthorName = data.authorName;
-		}
-		cb();
+	this.on('end', function () {
+		this.installDependencies({ skipInstall: options['skip-install'] });
 	});
+
+	this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-Generator.prototype.askFor = function askFor() {
+util.inherits(NwpGenerator, yeoman.generators.NamedBase);
+
+// NwpGenerator.prototype.getConfig = function getConfig() {
+// 	var cb   = this.async(),
+// 		self = this;
+
+// 	self.defaultAuthorName = '';
+// 	self.defaultAuthorURI = '';
+// 	self.configExists = false;
+
+// 	config.getConfig(function(err, data) {
+// 		if (!err) {
+// 			self.defaultAuthorName = data.authorName;
+// 		}
+// 		cb();
+// 	});
+// };
+
+NwpGenerator.prototype.askFor = function askFor() {
 	var cb   = this.async(),
 		self = this,
-		prompts = [{
-			name: 'pluginName',
-			message: 'Name of the plugin: ',
-			default: 'myPlugin'
-		}, {
-			name: 'pluginAuthor',
-			message: 'Author Name: ',
-			default: self.defaultAuthorName
-		}];
+		prompts;
 
-	this.prompt(prompts, function(e, props) {
-		if(e) {
-			return self.emit('error', e);
-		}
+	prompts = [{
+		name: 'pluginName',
+		message: 'Name of the plugin: ',
+		default: 'myPlugin'
+	}, {
+		name: 'pluginAuthor',
+		message: 'Author Name: ',
+		default: self.defaultAuthorName
+	}];
 
-		self.pluginName   = props.pluginName;
-		self.pluginAuthor = props.pluginAuthor;
-
-		cb();
-	});
+	this.prompt(prompts,function(props) {
+							self.pluginName   = props.pluginName;
+							self.pluginAuthor = props.pluginAuthor;
+							cb();
+						}.bind(this));
 };
 
-Generator.prototype.createPlugin = function createPlugin() {
-	var cb = this.async();
+NwpGenerator.prototype.createPlugin = function createPlugin() {
+	// var cb = this.async();
+	var self = this,
+		_ = require('underscore');
+
+	_.str = require('underscore.string');
+	// _.mixin(_.str.exports());
+	// _.str.include('Underscore.string', 'string'); // => true
 
 	this.mkdir('doc');
 	this.mkdir('src/main/php');
@@ -73,39 +80,43 @@ Generator.prototype.createPlugin = function createPlugin() {
 	this.mkdir('src/main/resources/images');
 	this.mkdir('src/main/resources/lang');
 
-	this.copy('*.php', 'src/main/php');
+	this.template('php/plugin-name.php', 'src/main/php/'+ _.slugify(self.pluginName) +'.php');
 
-	this.tarball('https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/tarball/master', 'app/wp-content/plugins', cb);
+	// this.tarball('https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/tarball/master', 'app/wp-content/plugins', cb);
 };
 
-Generator.prototype.gruntfile = function gruntfile() {
+NwpGenerator.prototype.gruntfile = function gruntfile() {
 	this.copy('Gruntfile.js', 'Gruntfile.js');
 };
 
 
-Generator.prototype.editFiles = function editFiles(){
-	var cb       = this.async(),
-		self     = this,
-		safeName = self.pluginName.replace(/\ /g, '');
+// NwpGenerator.prototype.editFiles = function editFiles(){
+// 	var cb       = this.async(),
+// 		self     = this,
+// 		safeName = self.pluginName.replace(/\ /g, '');
 
-	fs.rename('app/wp-content/plugins/plugin-name', 'app/wp-content/plugins/'+safeName, function() {
-		var pluginFile = 'app/wp-content/plugins/'+safeName+'/plugin-name.php';
+// 	fs.rename('app/wp-content/plugins/plugin-name', 'app/wp-content/plugins/'+safeName, function() {
+// 		var pluginFile = 'app/wp-content/plugins/'+safeName+'/plugin-name.php';
 
-		fs.readFile(pluginFile, 'utf8', function (err, data) {
-			if (err) { throw err; }
+// 		fs.readFile(pluginFile, 'utf8', function (err, data) {
+// 			if (err) { throw err; }
 
-			data = data.replace(/^.*Plugin Name: .*$/mg, 'Plugin Name: ' + self.pluginName);
-			data = data.replace(/^.*Author: .*$/mg, 'Author: ' + self.pluginAuthor);
+// 			data = data.replace(/^.*Plugin Name: .*$/mg, 'Plugin Name: ' + self.pluginName);
+// 			data = data.replace(/^.*Author: .*$/mg, 'Author: ' + self.pluginAuthor);
 
-			fs.writeFile(pluginFile, data);
-			fs.unlink('app/wp-content/plugins/README.md', function() {
-				cb();
-			});
-		});
-	});
-};
+// 			fs.writeFile(pluginFile, data);
+// 			fs.unlink('app/wp-content/plugins/README.md', function() {
+// 				cb();
+// 			});
+// 		});
+// 	});
+// };
 
-Generator.prototype.goodbye = function goodbye() {
+NwpGenerator.prototype.goodbye = function goodbye() {
 	this.log.writeln('Plugin created successfully');
 	this.log.writeln('');
+};
+
+NwpGenerator.prototype.packageJSON = function packageJSON() {
+	this.template('_package.json', 'package.json');
 };

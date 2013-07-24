@@ -22,7 +22,9 @@
 		"rimraf": "~2.1.4",
 		"colors": "~0.6.0-1",
 		"mysql": "~2.0.0-alpha7",
-		"node-uuid": "~1.4.0"
+		"node-uuid": "~1.4.0",
+		"underscore": "~1.5.1",
+		"underscore.string": "~2.3.3"
 	},
 	"engines": {
 		"node": ">=0.8.0"
