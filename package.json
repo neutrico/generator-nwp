@@ -1,7 +1,7 @@
 {
 	"name": "generator-nwp",
-	"version": "0.0.9",
-	"description": "Yeoman generator for Wordpress project for neutrico.pl",
+	"version": "0.0.1",
+	"description": "Yeoman generator for Wordpress projects developed by neutrico.pl",
 	"homepage": "https://github.com/neutrico/generator-nwp",
 	"author": {
 		"name": "Marcin Antczak",

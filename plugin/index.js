@@ -7,7 +7,6 @@
 var util   = require('util'),
 	path   = require('path'),
 	yeoman = require('yeoman-generator'),
-	fs     = require('fs'),
 	config = require('./../config.js');
 
 var NwpGenerator = module.exports = function Generator(args, options) {
@@ -115,12 +114,14 @@ NwpGenerator.prototype.createPlugin = function createPlugin() {
 	this.mkdir('src/main/resources/images');
 	this.mkdir('src/main/resources/lang');
 
-	this.copy('css/admin.css', 'src/main/resources/css/admin.css');
-	this.copy('css/main.css', 'src/main/resources/css/main.css');
-
 	this.template('php/plugin-name.php', 'src/main/php/' + _.slugify( this.pluginName ) + '.php');
 	this.template('php/class-plugin-name.php', 'src/main/php/class-' + _.slugify( this.pluginName ) + '.php' );
 };
+
+NwpGenerator.prototype.css = function css() {
+	this.copy('css/admin.css', 'src/main/resources/css/admin.css');
+	this.copy('css/main.css', 'src/main/resources/css/main.css');
+}
 
 NwpGenerator.prototype.bower = function bower() {
   this.copy('_bowerrc', '.bowerrc');
