@@ -59,8 +59,6 @@ NwpGenerator.prototype.askFor = function askFor() {
 	}];
 
 	if (!self.configExists) {
-		self.log.writeln('test3');
-
 		extendedPrompts = [ {
 			type: 'input',
 			name: 'pluginAuthorEmail',
@@ -114,14 +112,23 @@ NwpGenerator.prototype.createPlugin = function createPlugin() {
 	this.mkdir('src/main/resources/images');
 	this.mkdir('src/main/resources/lang');
 
+	this.template('php/index.php', 'src/main/php/index.php');
+	this.template('php/uninstall.php', 'src/main/php/uninstall.php');
 	this.template('php/plugin-name.php', 'src/main/php/' + _.slugify( this.pluginName ) + '.php');
 	this.template('php/class-plugin-name.php', 'src/main/php/class-' + _.slugify( this.pluginName ) + '.php' );
+
+	this.template('lang/plugin-name.pot', 'src/main/resources/lang/' + _.slugify( this.pluginName) + '.pot' );
 };
 
-NwpGenerator.prototype.css = function css() {
+NwpGenerator.prototype.scripts = function scripts() {
+	this.copy('js/admin.js', 'src/main/javascript/admin.js');
+	this.copy('js/main.js', 'src/main/javascript/main.js');
+};
+
+NwpGenerator.prototype.styles = function styles() {
 	this.copy('css/admin.css', 'src/main/resources/css/admin.css');
 	this.copy('css/main.css', 'src/main/resources/css/main.css');
-}
+};
 
 NwpGenerator.prototype.bower = function bower() {
   this.copy('_bowerrc', '.bowerrc');
@@ -138,5 +145,4 @@ NwpGenerator.prototype.gruntfile = function gruntfile() {
 
 NwpGenerator.prototype.goodbye = function goodbye() {
 	this.log.writeln('Plugin created successfully');
-	this.log.writeln('');
 };

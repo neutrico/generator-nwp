@@ -10,33 +10,10 @@
 /**
  * Plugin class.
  *
- * TODO: Rename this class to a proper name for your plugin.
- *
- * @package Plugin_Name
- * @author  Your Name <email@example.com>
+ * @package @@name
+ * @author  @@author <@@authormail>
  */
 class Plugin_Name {
-
-	/**
-	 * Plugin version, used for cache-busting of style and script file references.
-	 *
-	 * @since   1.0.0
-	 *
-	 * @var     string
-	 */
-	protected $version = '1.0.0';
-
-	/**
-	 * Unique identifier for your plugin.
-	 *
-	 * Use this value (not the variable name) as the text domain when internationalizing strings of text. It should
-	 * match the Text Domain file header in the main plugin file.
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      string
-	 */
-	protected $plugin_slug = 'plugin-name';
 
 	/**
 	 * Instance of this class.
@@ -48,13 +25,19 @@ class Plugin_Name {
 	protected static $instance = null;
 
 	/**
-	 * Slug of the plugin screen.
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      string
-	 */
-	protected $plugin_screen_hook_suffix = null;
+     * Constructor. Intentionally left empty and public.
+     *
+     * @see plugin_init()
+     * @since 2013.07.12
+     */
+    public function __construct() {}
+
+    public function plugin_init() {
+
+        // Load plugin text domain
+        add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+
+    }
 
 	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
