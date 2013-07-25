@@ -28,21 +28,25 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
-	die;
+    die;
 }
 
-// TODO: replace `class-plugin-name.php` with the name of the actual plugin's class file
-require_once( plugin_dir_path( __FILE__ ) . 'class-plugin-name.php' );
+if ( function_exists('spl_autoload_register')) {
 
-// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-// TODO: replace Plugin_Name with the name of the plugin defined in `class-plugin-name.php`
-register_activation_hook( __FILE__, array( 'Plugin_Name', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'Plugin_Name', 'deactivate' ) );
+    function neutrico_autoload($class) {
 
-// TODO: replace Plugin_Name with the name of the plugin defined in `class-plugin-name.php`
-Plugin_Name::get_instance();
+    }
 
-add_action(
-    'plugins_loaded',
-    array ( <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>::get_instance(), 'plugin_init' )
-);
+    spl_autoload_register('neutrico_autoload');
+
+    require_once( plugin_dir_path( __FILE__ ) . 'class-<%= _.slugify(pluginName) %>.php' );
+
+    register_activation_hook( __FILE__, array( '<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>', 'activate' ) );
+    register_deactivation_hook( __FILE__, array( '<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>', 'deactivate' ) );
+
+    add_action(
+        'plugins_loaded',
+        array ( <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>::get_instance(), 'plugin_init' )
+    );
+
+};

@@ -44,10 +44,6 @@ NwpGenerator.prototype.getConfig = function getConfig() {
 
 NwpGenerator.prototype.askFor = function askFor() {
 
-	var test = 'This is plugin Name';
-
-	this.log.writeln(test.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_"));
-
 	var cb   = this.async(),
 		self = this,
 		_ = require('underscore'),

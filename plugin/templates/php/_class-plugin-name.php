@@ -28,26 +28,18 @@ class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUppe
      * Constructor. Intentionally left empty and public.
      *
      * @see plugin_init()
-     * @since 2013.07.12
+     * @since 0.0.1
      */
     public function __construct() {}
-
-    public function plugin_init() {
-
-        // Load plugin text domain
-        add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
-
-    }
 
 	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
 	 * @since     1.0.0
 	 */
-	private function __construct() {
-
-		// Load plugin text domain
-		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
+    public function plugin_init() {
+        // Load plugin text domain
+        add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		// Add the options page and menu item.
 		// add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
@@ -63,8 +55,7 @@ class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUppe
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_action( 'TODO', array( $this, 'action_method_name' ) );
 		add_filter( 'TODO', array( $this, 'filter_method_name' ) );
-
-	}
+    }
 
 	/**
 	 * Return an instance of this class.
