@@ -84,9 +84,9 @@ module.exports = function (grunt) {
 			compile: {
 				files: [{
 					expand: true,
-					cwd: '<%= pkg.config.dir.src %>/coffee',
+					cwd: '<%= pkg.config.dir.coffee %>',
 					src: '{,*/}*.coffee',
-					dest: '<%= pkg.config.dir.theme %>/assets/js',
+					dest: '<%= pkg.config.dir.dist %>/assets/js',
 					ext: '.js'
 				}]
 			}
@@ -100,8 +100,8 @@ module.exports = function (grunt) {
 		 */
 		compass: {
 			options: {
-				sassDir: '<%= pkg.config.dir.src %>/scss',
-				cssDir: '<%= pkg.config.dir.theme + "/" + pkg.config.slug %>/assets/css',
+				sassDir: '<%= pkg.config.dir.scss %>',
+				cssDir: '<%= pkg.config.dir.dist + "/" + pkg.name %>/assets/css',
 				relativeAssets: false,
 				outputStyle: 'expanded',
 				force: true
@@ -134,7 +134,7 @@ module.exports = function (grunt) {
 					archive: '<%= pkg.config.dir.target + "/neutrico/" + pkg.config.slug %>.zip'
 				},
 				expand: true,
-				cwd: '<%= pkg.config.dir.theme %>/',
+				cwd: '<%= pkg.config.dir.dist %>/',
 				src: ['**/*']
 			},
 
@@ -143,7 +143,7 @@ module.exports = function (grunt) {
 					archive: '<%= pkg.config.dir.target + "/tf/" + pkg.config.slug %>.zip'
 				},
 				expand: true,
-				cwd: '<%= pkg.config.dir.theme %>/',
+				cwd: '<%= pkg.config.dir.dist %>/',
 				src: ['**/*']
 			},
 
@@ -203,25 +203,25 @@ module.exports = function (grunt) {
 			javascript: {
 				files: [{
 					expand: true,
-					cwd: '<%= pkg.config.dir.src %>/javascript',
+					cwd: '<%= pkg.config.dir.js %>',
 					src: ['**/*'],
-					dest: '<%= pkg.config.dir.theme + "/" + pkg.config.slug %>/assets/js'
+					dest: '<%= pkg.config.dir.dist + "/" + pkg.name %>/assets/js'
 				}]
 			},
 			resources: {
 				files: [{
 					expand: true,
-					cwd: '<%= pkg.config.dir.src %>/resources',
-					src: ['fonts/**/*', 'images/**/*', 'lang/**/*'],
-					dest: '<%= pkg.config.dir.theme + "/" + pkg.config.slug  %>/assets/'
+					cwd: '<%= pkg.config.dir.resources %>',
+					src: ['fonts/**/*', 'images/**/*', 'lang/**/*', 'css/**/*'],
+					dest: '<%= pkg.config.dir.dist + "/" + pkg.name  %>/assets/'
 				}]
 			},
 			vendor: {
 				files: [{
 					expand: true,
-					cwd: '<%= pkg.config.dir.src %>/php/vendor',
+					cwd: '<%= pkg.config.dir.php %>/vendor',
 					src: ['**/*'],
-					dest: '<%= pkg.config.dir.theme + "/" + pkg.config.slug  %>/vendor/'
+					dest: '<%= pkg.config.dir.dist + "/" + pkg.name  %>/vendor/'
 				}]
 			},
 			'licensing-tf': {
@@ -237,7 +237,7 @@ module.exports = function (grunt) {
 				files: [{
 					expand: true,
 					dot: false,
-					cwd: '<%= pkg.config.dir.src %>/resources/preview',
+					cwd: '<%= pkg.config.dir.resources %>/preview',
 					dest: '<%= pkg.config.dir.preview %>',
 					src: ['**/*']
 				}]
@@ -615,50 +615,26 @@ module.exports = function (grunt) {
 			initialize: {
 
 				files: [
-					// main theme descriptor
 					{
-						// expand: true,
-						// flatten: false,
-						src: ['<%= pkg.config.dir.src %>/resources/css/style.css'],
-						dest: '<%= pkg.config.dir.theme + "/" + pkg.config.slug %>/style.css'
-					},
-					// php code
-					{
-						cwd: '<%= pkg.config.dir.src %>/php/',
+						cwd: '<%= pkg.config.dir.php %>',
 						expand: true,
 						flatten: false,
 						src: '**/*.php',
-						dest: '<%= pkg.config.dir.theme + "/" + pkg.config.slug %>/'
+						dest: '<%= pkg.config.dir.dist + "/" + pkg.name %>/'
 					}
 				],
 				options: {
 					variables: {
-						'name': '<%= pkg.name %>',
+						'name': '<%= pkg.config.fullname %>',
 						'description': '<%= pkg.description %>',
 						'url': '<%= pkg.homepage %>',
-
 						'author': '<%= pkg.author.name %>',
-						'authormail': '<%= pkg.author.email %>',
-						'authorurl': '<%= pkg.author.url %>',
-
-						'version': '<%= pkg.version %>',
+						'authoruri': '<%= pkg.author.url %>',
+						'authoremail': '<%= pkg.author.email %>',
 						'inceptionyear': '<%= grunt.template.today("yyyy") %>',
-
-						// licenses
-						'gpl': '<%= pkg.licenses[0].type %>',
-						'gplurl': '<%= pkg.licenses[0].url %>',
-						'tf': '<%= pkg.licenses[1].type %>',
-						'tfurl': '<%= pkg.licenses[1].url %>',
-						'npl': '<%= pkg.licenses[2].type %>',
-						'nplurl': '<%= pkg.licenses[2].url %>',
-
-						'license': '<%= _.pluck(pkg.licenses, "type").join(", ") %>',
-						'licuri': '<%= _.pluck(pkg.licenses, "url").join(", ") %>',
-
-						'tags': '<%= pkg.config.tags %>',
-						'textdomain': '<%= pkg.config.textdomain.name %>',
-						'domainpath': '<%= pkg.config.textdomain.path %>',
-						'timestamp': '<%= grunt.template.today("isoDateTime") %>'
+						'version': '<%= pkg.version %>',
+						'timestamp': '<%= grunt.template.today("isoDateTime") %>',
+						'slug': '<%= pkg.name %>'
 					}
 				}
 			}
@@ -747,16 +723,16 @@ module.exports = function (grunt) {
 		sync: {
 			watch: {
 				files: [{
-					cwd: '<%= pkg.config.dir.theme + "/" + pkg.config.slug %>',
+					cwd: '<%= pkg.config.dir.dist + "/" + pkg.name %>',
 					src: '**/*.*',
-					dest: '<%= pkg.config.sandbox.path + "/" + pkg.config.slug %>'
+					dest: '<%= pkg.config.sandbox.path + "/" + pkg.name %>'
 				}]
 			},
 			vendor: {
 				files: [{
 					cwd: '<%= pkg.config.dir.src %>/php/vendor',
 					src: '**/*.*',
-					dest: '<%= pkg.config.dir.theme + "/" + pkg.config.slug %>/vendor'
+					dest: '<%= pkg.config.dir.theme + "/" + pkg.name %>/vendor'
 				}]
 			}
 		},
@@ -794,7 +770,7 @@ module.exports = function (grunt) {
 			},
 
 			coffee: {
-				files: ['<%= pkg.config.dir.src %>/coffee/{,*/}*.coffee'],
+				files: ['<%= pkg.config.dir.coffee %>/{,*/}*.coffee'],
 				tasks: ['coffee:compile', 'sync:watch']
 			},
 
@@ -804,16 +780,16 @@ module.exports = function (grunt) {
 			},
 
 			compass: {
-				files: ['<%= pkg.config.dir.src %>/scss/{,*/}*.{scss,sass}'],
+				files: ['<%= pkg.config.dir.scss %>/{,*/}*.{scss,sass}'],
 				tasks: ['compass:compile', 'sync:watch']
 			},
 
 			php: {
-				files: ['<%= pkg.config.dir.src %>/php/**/*.php'],
+				files: ['<%= pkg.config.dir.php %>/**/*.php'],
 				tasks: ['replace:initialize', 'sync:watch']
 			},
 			vendor: {
-				files: ['<%= pkg.config.dir.src %>/php/vendor/**/*'],
+				files: ['<%= pkg.config.dir.php %>/vendor/**/*'],
 				tasks: ['sync:vendor', 'sync:watch']
 			}
 		}

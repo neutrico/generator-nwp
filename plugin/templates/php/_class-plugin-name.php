@@ -1,7 +1,7 @@
 <?php
 /**
  * @package   @@name
- * @author    @@author <@@authormail>
+ * @author    @@author <@@authoremail>
  * @license   GPL-2.0+
  * @link      @@url
  * @copyright @@inceptionyear @@author
@@ -11,9 +11,9 @@
  * Plugin class.
  *
  * @package @@name
- * @author  @@author <@@authormail>
+ * @author  @@author <@@authoremail>
  */
-class Plugin_Name {
+class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %> {
 
 	/**
 	 * Instance of this class.

@@ -1,5 +1,7 @@
 {
 	"name": "<%= _.slugify(pluginName) %>",
+	"description": "<%= pluginDescription %>",
+	"homepage": "<%= pluginUrl %>",
 	"version": "0.0.1",
 	"dependencies": {},
 	"private": true,
@@ -23,7 +25,21 @@
 		"email": "<%= pluginAuthorEmail %>"
 	},
 	"config": {
-		"fullname": "<%= pluginName %>"
+		"fullname": "<%= pluginName %>",
+		"dir": {
+			"target":"target",
+			"coffee": "src/main/coffee",
+			"css": "src/main/resources/css",
+			"js": "src/main/javascript",
+			"php": "src/main/php",
+			"resources": "src/main/resources",
+			"scss": "src/main/scss",
+			"dist": "target/dist/Plugin"
+		},
+		"sandbox": {
+			"url": "http://sandbox.local.dev",
+			"path": "/media/Media/Workspace/sandbox/plugins/"
+		}
 	},
 	"devDependencies": {
 		"grunt": "~0.4.1",
@@ -49,6 +65,7 @@
 		"grunt-sftp-deploy": "0.0.8",
 		"grunt-shell": "0.3.0",
 		"grunt-svgmin": "~0.1.0",
-		"grunt-sync": "0.0.4"
+		"grunt-sync": "0.0.4",
+		"matchdep": "~0.1.1"
 	}
 }

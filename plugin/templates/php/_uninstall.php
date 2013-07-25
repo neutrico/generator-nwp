@@ -3,7 +3,7 @@
 *
 * @package     @@name
 * @description @@description
-* @author      @@author <@@authormail>
+* @author      @@author <@@authoremail>
 * @license     GPL-2.0+
 * @link        @@url
 * @copyright   @@inceptionyear @@author

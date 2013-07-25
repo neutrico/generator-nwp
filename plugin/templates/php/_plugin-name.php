@@ -7,7 +7,7 @@
  *
  * @package     @@name
  * @description @@description
- * @author      @@author <@@authormail>
+ * @author      @@author <@@authoremail>
  * @license     GPL-2.0+
  * @link        @@url
  * @copyright   @@inceptionyear @@author
@@ -15,7 +15,7 @@
  * @wordpress-plugin
  *
  * Plugin Name: @@name
- * Plugin URI:  @@homepage
+ * Plugin URI:  @@url
  * Description: @@description
  * Version:     @@version @@timestamp
  * Author:      @@author
@@ -44,5 +44,5 @@ Plugin_Name::get_instance();
 
 add_action(
     'plugins_loaded',
-    array ( Plugin_Name::get_instance(), 'plugin_init' )
+    array ( <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>::get_instance(), 'plugin_init' )
 );

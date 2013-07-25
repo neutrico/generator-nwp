@@ -43,6 +43,11 @@ NwpGenerator.prototype.getConfig = function getConfig() {
 };
 
 NwpGenerator.prototype.askFor = function askFor() {
+
+	var test = 'This is plugin Name';
+
+	this.log.writeln(test.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_"));
+
 	var cb   = this.async(),
 		self = this,
 		_ = require('underscore'),
@@ -56,6 +61,16 @@ NwpGenerator.prototype.askFor = function askFor() {
 		name: 'pluginName',
 		message: 'Name of the plugin: ',
 		default: 'myPlugin'
+	},{
+		type: 'input',
+		name: 'pluginDescription',
+		message: 'Plugin description: ',
+		default: 'Plugin description'
+	},{
+		type: 'input',
+		name: 'pluginUrl',
+		message: 'Plugin URL: ',
+		default: 'Plugin URL'
 	}];
 
 	if (!self.configExists) {
@@ -80,6 +95,8 @@ NwpGenerator.prototype.askFor = function askFor() {
 
 	self.prompt(prompts,function(props) {
 							self.pluginName   = props.pluginName;
+							self.pluginDescription   = props.pluginDescription;
+							self.pluginUrl   = props.pluginUrl;
 							self.pluginAuthorEmail = props.pluginAuthorEmail;
 							self.pluginAuthorName = props.pluginAuthorName;
 							self.pluginAuthorURI = props.pluginAuthorURI;
@@ -112,10 +129,10 @@ NwpGenerator.prototype.createPlugin = function createPlugin() {
 	this.mkdir('src/main/resources/images');
 	this.mkdir('src/main/resources/lang');
 
-	this.template('php/index.php', 'src/main/php/index.php');
-	this.template('php/uninstall.php', 'src/main/php/uninstall.php');
-	this.template('php/plugin-name.php', 'src/main/php/' + _.slugify( this.pluginName ) + '.php');
-	this.template('php/class-plugin-name.php', 'src/main/php/class-' + _.slugify( this.pluginName ) + '.php' );
+	this.template('php/_index.php', 'src/main/php/index.php');
+	this.template('php/_uninstall.php', 'src/main/php/uninstall.php');
+	this.template('php/_plugin-name.php', 'src/main/php/' + _.slugify( this.pluginName ) + '.php');
+	this.template('php/_class-plugin-name.php', 'src/main/php/class-' + _.slugify( this.pluginName ) + '.php' );
 
 	this.template('lang/plugin-name.pot', 'src/main/resources/lang/' + _.slugify( this.pluginName) + '.pot' );
 };
