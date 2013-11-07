@@ -41,12 +41,19 @@ if ( function_exists('spl_autoload_register')) {
 
     require_once( plugin_dir_path( __FILE__ ) . 'class-<%= _.slugify(pluginName) %>.php' );
 
-    register_activation_hook( __FILE__, array( '<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>', 'activate' ) );
-    register_deactivation_hook( __FILE__, array( '<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>', 'deactivate' ) );
+    register_activation_hook(
+        __FILE__,
+        array( '<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>', 'activate' )
+    );
+
+    register_deactivation_hook(
+        __FILE__,
+        array( '<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>', 'deactivate' )
+    );
 
     add_action(
         'plugins_loaded',
-        array ( <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>::get_instance(), 'plugin_init' )
+        array ( Neutrico\<%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}).replace(/\s+/g,"_") %>::get_instance(), 'plugin_init' )
     );
 
 };

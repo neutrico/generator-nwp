@@ -7,6 +7,8 @@
  * @copyright @@inceptionyear @@author
  */
 
+namespace Neutrico;
+
 /**
  * Plugin class.
  *
@@ -38,6 +40,9 @@ class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUppe
 	 * @since     1.0.0
 	 */
     public function plugin_init() {
+
+        add_action( 'after_setup_theme', array( &$this, 'check_theme_support' ), 1000 );
+
         // Load plugin text domain
         add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
@@ -55,6 +60,25 @@ class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUppe
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_action( 'TODO', array( $this, 'action_method_name' ) );
 		add_filter( 'TODO', array( $this, 'filter_method_name' ) );
+    }
+
+    public function check_theme_support() {
+
+        if ( current_theme_supports( $this->theme_support) ) {
+            $admin_page = 'required_page';
+            add_action( 'load-' . $admin_page, array( &$this, 'enqueue' ) );
+        }
+
+    }
+
+    private function enqueue() {
+        add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue_scripts' ) );
+        add_action( 'wp_enqueue_scripts', array( &$this, 'wp_enqueue_scripts' ) );
+    }
+
+    function admin_enqueue_scripts() {
+        $data = get_plugin_data(__FILE__);
+        wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array(), $data['Version'] );
     }
 
 	/**
@@ -79,7 +103,9 @@ class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUppe
 	 *
 	 * @since    1.0.0
 	 *
-	 * @param    boolean    $network_wide    True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
+	 * @param    boolean    $network_wide
+     * True if WPMU superadmin uses "Network Activate" action, false if WPMU
+     * is disabled or plugin is activated on an individual blog.
 	 */
 	public static function activate( $network_wide ) {
 		// TODO: Define activation functionality here
@@ -90,7 +116,9 @@ class <%= pluginName.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUppe
 	 *
 	 * @since    1.0.0
 	 *
-	 * @param    boolean    $network_wide    True if WPMU superadmin uses "Network Deactivate" action, false if WPMU is disabled or plugin is deactivated on an individual blog.
+	 * @param    boolean    $network_wide
+     * True if WPMU superadmin uses "Network Deactivate" action, false if WPMU
+     * is disabled or plugin is deactivated on an individual blog.
 	 */
 	public static function deactivate( $network_wide ) {
 		// TODO: Define deactivation functionality here
